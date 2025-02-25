@@ -6,6 +6,60 @@
  * and re-run `payload generate:types` to regenerate this file.
  */
 
+/**
+ * Supported timezones in IANA format.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "supportedTimezones".
+ */
+export type SupportedTimezones =
+  | 'Pacific/Midway'
+  | 'Pacific/Niue'
+  | 'Pacific/Honolulu'
+  | 'Pacific/Rarotonga'
+  | 'America/Anchorage'
+  | 'Pacific/Gambier'
+  | 'America/Los_Angeles'
+  | 'America/Tijuana'
+  | 'America/Denver'
+  | 'America/Phoenix'
+  | 'America/Chicago'
+  | 'America/Guatemala'
+  | 'America/New_York'
+  | 'America/Bogota'
+  | 'America/Caracas'
+  | 'America/Santiago'
+  | 'America/Buenos_Aires'
+  | 'America/Sao_Paulo'
+  | 'Atlantic/South_Georgia'
+  | 'Atlantic/Azores'
+  | 'Atlantic/Cape_Verde'
+  | 'Europe/London'
+  | 'Europe/Berlin'
+  | 'Africa/Lagos'
+  | 'Europe/Athens'
+  | 'Africa/Cairo'
+  | 'Europe/Moscow'
+  | 'Asia/Riyadh'
+  | 'Asia/Dubai'
+  | 'Asia/Baku'
+  | 'Asia/Karachi'
+  | 'Asia/Tashkent'
+  | 'Asia/Calcutta'
+  | 'Asia/Dhaka'
+  | 'Asia/Almaty'
+  | 'Asia/Jakarta'
+  | 'Asia/Bangkok'
+  | 'Asia/Shanghai'
+  | 'Asia/Singapore'
+  | 'Asia/Tokyo'
+  | 'Asia/Seoul'
+  | 'Australia/Sydney'
+  | 'Pacific/Guam'
+  | 'Pacific/Noumea'
+  | 'Pacific/Auckland'
+  | 'Pacific/Fiji';
+
 export interface Config {
   auth: {
     users: UserAuthOperations;
@@ -13,16 +67,46 @@ export interface Config {
   collections: {
     users: User;
     media: Media;
+    blogs: Blog;
+    categories: Category;
+    universities: University;
+    destinations: Destination;
+    courses: Course;
+    scholarships: Scholarship;
+    events: Event;
+    tests: Test;
+    'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
     'payload-migrations': PayloadMigration;
+  };
+  collectionsJoins: {};
+  collectionsSelect: {
+    users: UsersSelect<false> | UsersSelect<true>;
+    media: MediaSelect<false> | MediaSelect<true>;
+    blogs: BlogsSelect<false> | BlogsSelect<true>;
+    categories: CategoriesSelect<false> | CategoriesSelect<true>;
+    universities: UniversitiesSelect<false> | UniversitiesSelect<true>;
+    destinations: DestinationsSelect<false> | DestinationsSelect<true>;
+    courses: CoursesSelect<false> | CoursesSelect<true>;
+    scholarships: ScholarshipsSelect<false> | ScholarshipsSelect<true>;
+    events: EventsSelect<false> | EventsSelect<true>;
+    tests: TestsSelect<false> | TestsSelect<true>;
+    'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
+    'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
+    'payload-migrations': PayloadMigrationsSelect<false> | PayloadMigrationsSelect<true>;
   };
   db: {
     defaultIDType: string;
   };
   globals: {};
+  globalsSelect: {};
   locale: null;
   user: User & {
     collection: 'users';
+  };
+  jobs: {
+    tasks: unknown;
+    workflows: unknown;
   };
 }
 export interface UserAuthOperations {
@@ -81,6 +165,370 @@ export interface Media {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "blogs".
+ */
+export interface Blog {
+  id: string;
+  title: string;
+  slug: string;
+  bannerImage?: (string | null) | Media;
+  category?: (string | null) | Category;
+  writer: string;
+  publishDate: string;
+  summary?: string | null;
+  sections?:
+    | {
+        heading: string;
+        content?: {
+          root: {
+            type: string;
+            children: {
+              type: string;
+              version: number;
+              [k: string]: unknown;
+            }[];
+            direction: ('ltr' | 'rtl') | null;
+            format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+            indent: number;
+            version: number;
+          };
+          [k: string]: unknown;
+        } | null;
+        id?: string | null;
+      }[]
+    | null;
+  faqs?:
+    | {
+        question: string;
+        answer?: {
+          root: {
+            type: string;
+            children: {
+              type: string;
+              version: number;
+              [k: string]: unknown;
+            }[];
+            direction: ('ltr' | 'rtl') | null;
+            format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+            indent: number;
+            version: number;
+          };
+          [k: string]: unknown;
+        } | null;
+        id?: string | null;
+      }[]
+    | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "categories".
+ */
+export interface Category {
+  id: string;
+  title: string;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "universities".
+ */
+export interface University {
+  id: string;
+  name: string;
+  bannerImage?: (string | null) | Media;
+  quote?: string | null;
+  rank?: string | null;
+  internationalStudentsPercentage?: string | null;
+  location?: string | null;
+  famousCourses?: string | null;
+  establishedYear?: string | null;
+  feeRange?: string | null;
+  introduction?: string | null;
+  whyChooseUni?: string | null;
+  academicInformation?: string | null;
+  admissionDetails?: string | null;
+  slug: string;
+  tuitionFees?:
+    | {
+        program: string;
+        feePerYear: string;
+        duration: string;
+        id?: string | null;
+      }[]
+    | null;
+  alumniSuccessStories?:
+    | {
+        image?: (string | null) | Media;
+        name: string;
+        details?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  faqs?:
+    | {
+        question: string;
+        answer?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "destinations".
+ */
+export interface Destination {
+  id: string;
+  title: string;
+  slug: string;
+  bannerImage?: (string | null) | Media;
+  quote?: string | null;
+  shortIntro?: string | null;
+  whyStudyHere?: string | null;
+  courses?:
+    | {
+        name?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  scholarships?:
+    | {
+        name?: string | null;
+        details?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  universities?:
+    | {
+        name?: string | null;
+        location?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  detailedRequirements?:
+    | {
+        heading?: string | null;
+        content?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  benefits?:
+    | {
+        heading?: string | null;
+        content?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  costDetails?:
+    | {
+        expense?: string | null;
+        costRange?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  faqs?:
+    | {
+        question?: string | null;
+        answer?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "courses".
+ */
+export interface Course {
+  id: string;
+  title: string;
+  slug: string;
+  bannerImage?: (string | null) | Media;
+  oneLiner?: string | null;
+  field?: string | null;
+  duration?: string | null;
+  introduction?: string | null;
+  keyHighlights?: string | null;
+  admissionDetails?: string | null;
+  careerOpportunities?: string | null;
+  courseDetails?:
+    | {
+        field?: string | null;
+        description?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  studentReviews?:
+    | {
+        image?: (string | null) | Media;
+        name?: string | null;
+        review?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  faqs?:
+    | {
+        question?: string | null;
+        answer?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "scholarships".
+ */
+export interface Scholarship {
+  id: string;
+  title: string;
+  slug: string;
+  about?: string | null;
+  types_of_scholarship?: string | null;
+  how_to_apply?: string | null;
+  tips?: string | null;
+  scholarship_details?:
+    | {
+        provider_type: 'government' | 'college' | 'independent';
+        grant: string;
+        deadline: string;
+        title: string;
+        criteria?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "events".
+ */
+export interface Event {
+  id: string;
+  event_name: string;
+  event_details?:
+    | {
+        event_name: string;
+        banner_image?: (string | null) | Media;
+        date: string;
+        time: string;
+        location: string;
+        description?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  faqs?:
+    | {
+        question: string;
+        answer: string;
+        id?: string | null;
+      }[]
+    | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "tests".
+ */
+export interface Test {
+  id: string;
+  title: string;
+  slug: string;
+  banner_image?: (string | null) | Media;
+  short_intro?: string | null;
+  why_take_exam?: string | null;
+  exam_types?: string | null;
+  exam_format?: string | null;
+  test_guide?: string | null;
+  costs?:
+    | {
+        test_type: string;
+        cost: string;
+        id?: string | null;
+      }[]
+    | null;
+  comparisons?:
+    | {
+        title: string;
+        content?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  faqs?:
+    | {
+        question: string;
+        answer: string;
+        id?: string | null;
+      }[]
+    | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "payload-locked-documents".
+ */
+export interface PayloadLockedDocument {
+  id: string;
+  document?:
+    | ({
+        relationTo: 'users';
+        value: string | User;
+      } | null)
+    | ({
+        relationTo: 'media';
+        value: string | Media;
+      } | null)
+    | ({
+        relationTo: 'blogs';
+        value: string | Blog;
+      } | null)
+    | ({
+        relationTo: 'categories';
+        value: string | Category;
+      } | null)
+    | ({
+        relationTo: 'universities';
+        value: string | University;
+      } | null)
+    | ({
+        relationTo: 'destinations';
+        value: string | Destination;
+      } | null)
+    | ({
+        relationTo: 'courses';
+        value: string | Course;
+      } | null)
+    | ({
+        relationTo: 'scholarships';
+        value: string | Scholarship;
+      } | null)
+    | ({
+        relationTo: 'events';
+        value: string | Event;
+      } | null)
+    | ({
+        relationTo: 'tests';
+        value: string | Test;
+      } | null);
+  globalSlug?: string | null;
+  user: {
+    relationTo: 'users';
+    value: string | User;
+  };
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-preferences".
  */
 export interface PayloadPreference {
@@ -112,6 +560,344 @@ export interface PayloadMigration {
   batch?: number | null;
   updatedAt: string;
   createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "users_select".
+ */
+export interface UsersSelect<T extends boolean = true> {
+  updatedAt?: T;
+  createdAt?: T;
+  email?: T;
+  resetPasswordToken?: T;
+  resetPasswordExpiration?: T;
+  salt?: T;
+  hash?: T;
+  loginAttempts?: T;
+  lockUntil?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "media_select".
+ */
+export interface MediaSelect<T extends boolean = true> {
+  alt?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  url?: T;
+  thumbnailURL?: T;
+  filename?: T;
+  mimeType?: T;
+  filesize?: T;
+  width?: T;
+  height?: T;
+  focalX?: T;
+  focalY?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "blogs_select".
+ */
+export interface BlogsSelect<T extends boolean = true> {
+  title?: T;
+  slug?: T;
+  bannerImage?: T;
+  category?: T;
+  writer?: T;
+  publishDate?: T;
+  summary?: T;
+  sections?:
+    | T
+    | {
+        heading?: T;
+        content?: T;
+        id?: T;
+      };
+  faqs?:
+    | T
+    | {
+        question?: T;
+        answer?: T;
+        id?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "categories_select".
+ */
+export interface CategoriesSelect<T extends boolean = true> {
+  title?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "universities_select".
+ */
+export interface UniversitiesSelect<T extends boolean = true> {
+  name?: T;
+  bannerImage?: T;
+  quote?: T;
+  rank?: T;
+  internationalStudentsPercentage?: T;
+  location?: T;
+  famousCourses?: T;
+  establishedYear?: T;
+  feeRange?: T;
+  introduction?: T;
+  whyChooseUni?: T;
+  academicInformation?: T;
+  admissionDetails?: T;
+  slug?: T;
+  tuitionFees?:
+    | T
+    | {
+        program?: T;
+        feePerYear?: T;
+        duration?: T;
+        id?: T;
+      };
+  alumniSuccessStories?:
+    | T
+    | {
+        image?: T;
+        name?: T;
+        details?: T;
+        id?: T;
+      };
+  faqs?:
+    | T
+    | {
+        question?: T;
+        answer?: T;
+        id?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "destinations_select".
+ */
+export interface DestinationsSelect<T extends boolean = true> {
+  title?: T;
+  slug?: T;
+  bannerImage?: T;
+  quote?: T;
+  shortIntro?: T;
+  whyStudyHere?: T;
+  courses?:
+    | T
+    | {
+        name?: T;
+        id?: T;
+      };
+  scholarships?:
+    | T
+    | {
+        name?: T;
+        details?: T;
+        id?: T;
+      };
+  universities?:
+    | T
+    | {
+        name?: T;
+        location?: T;
+        id?: T;
+      };
+  detailedRequirements?:
+    | T
+    | {
+        heading?: T;
+        content?: T;
+        id?: T;
+      };
+  benefits?:
+    | T
+    | {
+        heading?: T;
+        content?: T;
+        id?: T;
+      };
+  costDetails?:
+    | T
+    | {
+        expense?: T;
+        costRange?: T;
+        id?: T;
+      };
+  faqs?:
+    | T
+    | {
+        question?: T;
+        answer?: T;
+        id?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "courses_select".
+ */
+export interface CoursesSelect<T extends boolean = true> {
+  title?: T;
+  slug?: T;
+  bannerImage?: T;
+  oneLiner?: T;
+  field?: T;
+  duration?: T;
+  introduction?: T;
+  keyHighlights?: T;
+  admissionDetails?: T;
+  careerOpportunities?: T;
+  courseDetails?:
+    | T
+    | {
+        field?: T;
+        description?: T;
+        id?: T;
+      };
+  studentReviews?:
+    | T
+    | {
+        image?: T;
+        name?: T;
+        review?: T;
+        id?: T;
+      };
+  faqs?:
+    | T
+    | {
+        question?: T;
+        answer?: T;
+        id?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "scholarships_select".
+ */
+export interface ScholarshipsSelect<T extends boolean = true> {
+  title?: T;
+  slug?: T;
+  about?: T;
+  types_of_scholarship?: T;
+  how_to_apply?: T;
+  tips?: T;
+  scholarship_details?:
+    | T
+    | {
+        provider_type?: T;
+        grant?: T;
+        deadline?: T;
+        title?: T;
+        criteria?: T;
+        id?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "events_select".
+ */
+export interface EventsSelect<T extends boolean = true> {
+  event_name?: T;
+  event_details?:
+    | T
+    | {
+        event_name?: T;
+        banner_image?: T;
+        date?: T;
+        time?: T;
+        location?: T;
+        description?: T;
+        id?: T;
+      };
+  faqs?:
+    | T
+    | {
+        question?: T;
+        answer?: T;
+        id?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "tests_select".
+ */
+export interface TestsSelect<T extends boolean = true> {
+  title?: T;
+  slug?: T;
+  banner_image?: T;
+  short_intro?: T;
+  why_take_exam?: T;
+  exam_types?: T;
+  exam_format?: T;
+  test_guide?: T;
+  costs?:
+    | T
+    | {
+        test_type?: T;
+        cost?: T;
+        id?: T;
+      };
+  comparisons?:
+    | T
+    | {
+        title?: T;
+        content?: T;
+        id?: T;
+      };
+  faqs?:
+    | T
+    | {
+        question?: T;
+        answer?: T;
+        id?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "payload-locked-documents_select".
+ */
+export interface PayloadLockedDocumentsSelect<T extends boolean = true> {
+  document?: T;
+  globalSlug?: T;
+  user?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "payload-preferences_select".
+ */
+export interface PayloadPreferencesSelect<T extends boolean = true> {
+  user?: T;
+  key?: T;
+  value?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "payload-migrations_select".
+ */
+export interface PayloadMigrationsSelect<T extends boolean = true> {
+  name?: T;
+  batch?: T;
+  updatedAt?: T;
+  createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
