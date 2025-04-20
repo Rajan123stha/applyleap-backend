@@ -8,7 +8,6 @@ const Blog: CollectionConfig = {
   },
   access: {
     read: () => true, // Allow public access for reading blogs
-    // Or if you need to restrict access, specify roles or conditions
   },
   fields: [
     {
@@ -16,7 +15,6 @@ const Blog: CollectionConfig = {
       type: 'text',
       required: true,
     },
-
     {
       name: 'slug',
       type: 'text',
@@ -33,16 +31,31 @@ const Blog: CollectionConfig = {
       required: false,
     },
     {
+      name: 'writer',
+      type: 'text',
+      required: true,
+    },
+    {
+      name: 'writerImage',
+      type: 'upload',
+      relationTo: 'media',
+      required: false,
+    },
+
+    {
+      name: 'writerPosition',
+      type: 'text',
+      label: 'Writer Position',
+      required: false,
+    },
+
+    {
       name: 'category',
       type: 'relationship',
       relationTo: 'categories',
       required: false,
     },
-    {
-      name: 'writer',
-      type: 'text',
-      required: true,
-    },
+
     {
       name: 'publishDate',
       type: 'date',
@@ -54,60 +67,94 @@ const Blog: CollectionConfig = {
       type: 'textarea',
       required: false,
     },
-    // ✅ Blog Sections Array
     {
       name: 'sections',
       type: 'array',
-      label: 'Blog Sections', // Add label
+      label: 'Blog Sections',
       required: false,
       fields: [
         {
           name: 'heading',
           type: 'text',
-          label: 'Section Heading', // Add label
+          label: 'Section Heading',
           required: true,
         },
         {
           name: 'content',
-          editor: lexicalEditor({}), // Configure the rich text editor
           type: 'richText',
-          label: 'Section Content', // Add label
+          editor: lexicalEditor({}),
+          label: 'Section Content',
           required: false,
         },
       ],
     },
-    // ✅ FAQs Array
     {
       name: 'faqs',
       type: 'array',
-      label: 'FAQs', // Add label
+      label: 'FAQs',
       required: false,
       fields: [
         {
           name: 'question',
           type: 'text',
-          label: 'FAQ Question', // Add label
+          label: 'FAQ Question',
           required: true,
         },
         {
           name: 'answer',
           type: 'richText',
           editor: lexicalEditor({}),
-          label: 'FAQ Answer', // Add label
+          label: 'FAQ Answer',
           required: false,
+        },
+      ],
+    },
+    {
+      name: 'sources',
+      type: 'array',
+      label: 'Sources',
+      required: false,
+      fields: [
+        {
+          name: 'title',
+          type: 'text',
+          label: 'Source Title',
+          required: true,
+        },
+        {
+          name: 'url',
+          type: 'text',
+          label: 'Source URL',
+          required: true,
         },
       ],
     },
   ],
   hooks: {
     beforeChange: [
-      ({ data, operation }) => {
-        if ((operation === 'create' || operation === 'update') && data.title && !data.slug) {
-          data.slug = data.title
-            .toLowerCase()
-            .replace(/[^a-z0-9]+/g, '-')
-            .replace(/^-|-$/g, '')
+      ({ data, operation, req }: any) => {
+        if (operation === 'create') {
+          if (data.title && !data.slug) {
+            data.slug = data.title
+              .toLowerCase()
+              .replace(/[^a-z0-9]+/g, '-')
+              .replace(/^-|-$/g, '')
+          }
         }
+
+        if (operation === 'update') {
+          const oldTitle = req?.originalDoc?.title
+          const newTitle = data.title
+
+          // Only update slug if title changed
+          if (newTitle && newTitle !== oldTitle) {
+            data.slug = newTitle
+              .toLowerCase()
+              .replace(/[^a-z0-9]+/g, '-')
+              .replace(/^-|-$/g, '')
+          }
+        }
+
         return data
       },
     ],

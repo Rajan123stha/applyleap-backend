@@ -54,5 +54,5 @@ export default buildConfig({
     payloadCloudPlugin(),
     // storage-adapter-placeholder
   ],
-  cors: ['http://localhost:5173', 'http://localhost:3000'],
+  cors: ['http://localhost:5173', 'http://localhost:3000', 'https://applyleap.com'],
 })

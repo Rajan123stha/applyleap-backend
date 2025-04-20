@@ -10,7 +10,7 @@ const start = async () => {
   // Enable CORS
   app.use(
     cors({
-      origin: process.env.FRONTEND_ORIGIN || 'http://localhost:3000', // Replace with your frontend domain
+      origin: process.env.FRONTEND_ORIGIN || 'https://applyleap.com/', // Replace with your frontend domain
       credentials: true, // Allow credentials (cookies, authorization headers, etc.)
     }),
   )

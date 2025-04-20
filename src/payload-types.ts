@@ -172,8 +172,10 @@ export interface Blog {
   title: string;
   slug: string;
   bannerImage?: (string | null) | Media;
-  category?: (string | null) | Category;
   writer: string;
+  writerImage?: (string | null) | Media;
+  writerPosition?: string | null;
+  category?: (string | null) | Category;
   publishDate: string;
   summary?: string | null;
   sections?:
@@ -215,6 +217,13 @@ export interface Blog {
           };
           [k: string]: unknown;
         } | null;
+        id?: string | null;
+      }[]
+    | null;
+  sources?:
+    | {
+        title: string;
+        url: string;
         id?: string | null;
       }[]
     | null;
@@ -602,8 +611,10 @@ export interface BlogsSelect<T extends boolean = true> {
   title?: T;
   slug?: T;
   bannerImage?: T;
-  category?: T;
   writer?: T;
+  writerImage?: T;
+  writerPosition?: T;
+  category?: T;
   publishDate?: T;
   summary?: T;
   sections?:
@@ -618,6 +629,13 @@ export interface BlogsSelect<T extends boolean = true> {
     | {
         question?: T;
         answer?: T;
+        id?: T;
+      };
+  sources?:
+    | T
+    | {
+        title?: T;
+        url?: T;
         id?: T;
       };
   updatedAt?: T;
