@@ -48,6 +48,16 @@ const Blog: CollectionConfig = {
       label: 'Writer Position',
       required: false,
     },
+    {
+      name: 'factCheckedBy',
+      type: 'text',
+      required: false,
+    },
+    {
+      name: 'reviewedBy',
+      type: 'text',
+      required: false,
+    },
 
     {
       name: 'category',

@@ -175,6 +175,8 @@ export interface Blog {
   writer: string;
   writerImage?: (string | null) | Media;
   writerPosition?: string | null;
+  factCheckedBy?: string | null;
+  reviewedBy?: string | null;
   category?: (string | null) | Category;
   publishDate: string;
   summary?: string | null;
@@ -614,6 +616,8 @@ export interface BlogsSelect<T extends boolean = true> {
   writer?: T;
   writerImage?: T;
   writerPosition?: T;
+  factCheckedBy?: T;
+  reviewedBy?: T;
   category?: T;
   publishDate?: T;
   summary?: T;
